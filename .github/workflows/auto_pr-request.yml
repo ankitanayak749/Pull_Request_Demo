@@ -10,7 +10,7 @@ jobs:
 
     steps:
     -name: checking out code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v2
        
       -name: Raise PR
        uses: rlespinasse/git-commit-data-action@v1.x
