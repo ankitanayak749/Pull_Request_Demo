@@ -1,0 +1,37 @@
+name: Create Pull Request from main to QA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        source: main
+        destination: QA
+        title: 'Sync main to QA'
+        body: |
+          This pull request is created automatically to merge changes from the main branch to the QA branch.
+          Please review the changes and ensure that they are ready for testing in the QA environment.
+        draft: false
+
+    - name: Pull Request Creation Success
+      if: success() && steps.cpr.outputs.pull-request-url
+      run: |
+        echo "Pull request created successfully!"
+        echo "Pull request URL: ${{ steps.cpr.outputs.pull-request-url }}"
+
+    - name: Pull Request Creation Failure
+      if: failure()
+      run: echo "Failed to create pull request."
