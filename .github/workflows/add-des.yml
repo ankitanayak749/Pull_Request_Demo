@@ -24,14 +24,13 @@ jobs:
         body: |
           This pull request is created automatically to merge changes from the main branch to the QA branch.
           Please review the changes and ensure that they are ready for testing in the QA environment.
-        draft: true
+        draft: false
 
-    - name: Pull Request Creation Success
-      if: success() && steps.cpr.outputs.pull-request-url
+    - name: Pull Request Creation Status
       run: |
-        echo "Pull request created successfully!"
-        echo "Pull request URL: ${{ steps.cpr.outputs.pull-request-url }}"
-
-    - name: Pull Request Creation Failure
-      if: failure()
-      run: echo "Failed to create pull request."
+        if [ "${{ steps.cpr.outputs.pull-request-url }}" != "" ]; then
+          echo "Pull request created successfully!"
+          echo "Pull request URL: ${{ steps.cpr.outputs.pull-request-url }}"
+        else
+          echo "Failed to create pull request."
+        fi
