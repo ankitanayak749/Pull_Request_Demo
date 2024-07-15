@@ -1,0 +1,33 @@
+name: Demo to setup a project with github actions
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    -name: checking out code
+      uses: actions/checkout@v5
+       
+      -name: Raise PR
+       uses: rlespinasse/git-commit-data-action@v1.x
+
+      -name: Raise PR 
+        uses: peter-evans/create-pull-request@v3
+         with:
+           branch: "auto-pr-branch"
+           base: main
+           title: "demo for auto pr"
+           committer: ${{ env.GIT_COMMIT_AUTHOR_NAME}} <&{{env.GIT_COMMIT_AUTHOR_EMAIL}}">
+           author: ${{env.GIT_COMMIT_AUTHOR_NAME}} <${{env.GIT_COMMIT_AUTHOR_EMAIL}}">
+           body:
+            This is to show automatic PR creation
+           token: ${{secrets. GITHUB_TOKEN}}
+           delete_branch: true
+           
+           
+    
+       
