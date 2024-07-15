@@ -1,0 +1,34 @@
+name: Add Comment on Pull Request Creation
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  add_comment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Add comment to pull request
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { context, github } = require('@actions/github');
+
+          // Get the pull request number
+          const prNumber = context.payload.pull_request.number;
+
+          // Define the comment body
+          const commentBody = "ankita";
+
+          // Create the comment
+          await github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: prNumber,
+            body: commentBody
+          });
