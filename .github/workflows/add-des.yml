@@ -24,7 +24,7 @@ jobs:
         body: |
           This pull request is created automatically to merge changes from the main branch to the QA branch.
           Please review the changes and ensure that they are ready for testing in the QA environment.
-        draft: false
+        draft: true
 
     - name: Pull Request Creation Success
       if: success() && steps.cpr.outputs.pull-request-url
