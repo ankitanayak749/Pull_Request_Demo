@@ -1,0 +1,36 @@
+name: Create PR from dev to main
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create PR from dev to main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        ORGANIZATION="AnkitaNayak"
+        REPO="Salesforce-DevOps"
+        SOURCE_BRANCH="main"
+        TARGET_BRANCH="QA"
+        
+        # Create the pull request
+        response=$(curl -s -o response.json -w "%{http_code}" \
+          -X POST \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d '{
+                "title": "PR from '$SOURCE_BRANCH' to '$TARGET_BRANCH'",
+                "head": "'$SOURCE_BRANCH'",
+                "base": "'$TARGET_BRANCH'",
+                "body": "PR from main to QA"
+              }' \
+          https://api.github
